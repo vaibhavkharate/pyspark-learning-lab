@@ -11,6 +11,8 @@ df = spark.read.csv("path_to_your_csv/Updated_Employee_Details.csv", header=True
 df.createOrReplaceTempView("employee")
 
 # Exercise 1: Calculate Monthly Salary, then Rename the Column to 'Monthly_Income'
+# This exercise demonstrates how to calculate the monthly salary from the annual salary by dividing the salary by 12 and then renaming the resultant column to 'monthly_income'.
+# Using withColumn to create the new column and withColumnRenamed to rename it.
 df = df.withColumn("monthly_salary", col("salary") / 12).withColumnRenamed("monthly_salary", "monthly_income")
 df.show()
 # SQL Equivalent

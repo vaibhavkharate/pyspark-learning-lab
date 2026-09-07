@@ -1,39 +1,50 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import expr
+# Importing expr function to use SQL expressions in DataFrame transformations
 
 # Initialize a Spark session
 spark = SparkSession.builder.appName("WithColumnTransformations").getOrCreate()
 
 # Load the data into a DataFrame
+# The CSV file is assumed to have a header and the schema is inferred automatically.
 df = spark.read.csv("data/employee.csv", header=True, inferSchema=True)
 
 # Register the DataFrame as a temporary view to use SQL
+# This allows us to run SQL queries against the DataFrame as if it were a table in a database.
 df.createOrReplaceTempView("employee")
 
 # Exercise 1: Add a New Column Showing Monthly Salary
+# This exercise demonstrates how to calculate the monthly salary from the annual salary by dividing the salary by 12.
 df.withColumn("monthly_salary", df.salary / 12).show()
 # SQL Equivalent
+# The SQL equivalent of the above DataFrame operation is to select all columns and create a new column 'monthly_salary' by dividing the 'salary' column by 12. This is done using the SQL query:
 spark.sql("SELECT *, salary / 12 as monthly_salary FROM employee").show()
 
 # Exercise 2: Update Department Names to Uppercase
+# This exercise shows how to convert department names to uppercase using the 'upper' function in SQL expressions.
 df.withColumn("dept_uppercase", expr("upper(dept)")).show()
 # SQL Equivalent
 spark.sql("SELECT *, UPPER(dept) as dept_uppercase FROM employee").show()
 
 # Exercise 3: Create a Boolean Column Checking if Salary is Above Average
-average_salary = df.selectExpr("avg(salary)").first()[0]
+# This exercise illustrates how to compare individual salaries against the average salary. First, we calculate the average salary and then create a new column 'above_avg' that indicates whether each employee's salary is above the average.
+average_salary = df.selectExpr("avg(salary)").first()[0] # Calculate the average salary from the DataFrame  
+# .first()[0] retrieves the first row and the first column value, which is the average salary.
 df.withColumn("above_avg", df.salary > average_salary).show()
 # SQL Equivalent
 spark.sql("SELECT *, salary > (SELECT AVG(salary) FROM employee) as above_avg FROM employee").show()
 
 # Exercise 4: Add Tenure Column Showing Years Since Joining
+# This exercise calculates the tenure of employees based on their date of joining. The tenure is computed as the difference between the current year and the year of joining.
 df.withColumn("tenure", expr("year(current_date()) - year(date_of_joining)")).show()
 # SQL Equivalent
 spark.sql("SELECT *, YEAR(current_date()) - YEAR(date_of_joining) as tenure FROM employee").show()
 
 # Exercise 5: Create a Column to Categorize Salaries
+# This exercise categorizes salaries into 'High', 'Medium', or 'Low' based on specified salary ranges. A new column 'salary_category' is created using a CASE statement.
 df.withColumn("salary_category", expr("CASE WHEN salary > 100000 THEN 'High' WHEN salary > 50000 THEN 'Medium' ELSE 'Low' END")).show()
 # SQL Equivalent
+# The SQL equivalent of the above DataFrame operation is to select all columns and create a new column 'salary_category' using a CASE statement that categorizes salaries into 'High', 'Medium', or 'Low' based on the specified ranges. This is done using the SQL query:
 spark.sql("""
 SELECT *, CASE 
             WHEN salary > 100000 THEN 'High' 
