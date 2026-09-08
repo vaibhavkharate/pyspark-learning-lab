@@ -1,6 +1,10 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, when, expr, year, current_date, month, expr, lit
-
+ # Initialize a Spark session
+ # col is used to refer to DataFrame columns in a more readable way, especially when performing transformations.
+ # when is used to create conditional expressions, similar to SQL's CASE WHEN statements.
+ # expr allows you to use SQL expressions directly in DataFrame transformations.
+ # lit is used to create a column with a constant value, which can be useful for comparisons or calculations.
 from pyspark import StorageLevel
 
 # Initialize a Spark session
