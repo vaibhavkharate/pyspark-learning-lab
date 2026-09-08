@@ -125,6 +125,8 @@ SELECT *, (salary - (SELECT min(salary) FROM employees)) / ((SELECT max(salary) 
 """).show()
 
 # 10. initials
+# This exercise demonstrates how to create a new column that contains the initials of each employee's name. The initials are derived by concatenating the first letter of the first name and the first letter of the last name, which is extracted by locating the space character in the full name.
+# Using withColumn to create the new column and expr to handle string manipulation.
 df = df.withColumn("initials", expr("concat(substring(ename, 1, 1), substring(ename, locate(' ', ename)+1, 1))"))
 spark.sql("""
 SELECT *, CONCAT(SUBSTRING(ename, 1, 1), SUBSTRING(ename, LOCATE(' ', ename) + 1, 1)) as initials FROM employees
