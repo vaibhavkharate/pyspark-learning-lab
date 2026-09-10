@@ -1,3 +1,7 @@
+# case expression is a conditional expression that allows you to perform different actions based on specified conditions. It is similar to the CASE WHEN statement in SQL and can be used to create new columns or modify existing ones based on certain criteria.
+# case expressions are useful for categorizing data, creating flags, or performing conditional transformations in a DataFrame. They provide a way to handle complex logic and make decisions based on the values of one or more columns.
+# the use of case expressions in PySpark allows for more advanced data manipulation and analysis, enabling users to implement business rules, data validation, and custom logic directly within their DataFrame operations. This can lead to more efficient and readable code when working with large datasets in a distributed computing environment.
+
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, when, expr, year, current_date, month, expr, lit
  # Initialize a Spark session
