@@ -1,3 +1,7 @@
+# withColumn is used to add a new column or replace an existing column in a DataFrame. It allows for transformations on existing columns or the creation of new columns based on expressions or functions.
+# withColumnRenamed is used to rename an existing column in a DataFrame. It is useful for improving the readability of column names or aligning them with specific naming conventions.
+# the used withColumn and withColumnRenamed methods are part of the DataFrame API in PySpark, which provides a high-level abstraction for working with structured data. These methods enable users to perform complex data transformations and manipulations efficiently, leveraging Spark's distributed computing capabilities.
+
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import expr
 # Importing expr function to use SQL expressions in DataFrame transformations
