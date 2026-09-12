@@ -1,3 +1,7 @@
+# GroupBy and Aggregation Exercises in PySpark
+# groupBy and aggregation are fundamental operations in data analysis, allowing you to summarize and analyze data efficiently. In this exercise, we will explore various scenarios using the employee dataset to perform groupBy and aggregation operations in PySpark.
+# 
+
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import avg, sum, max, min, count, expr, countDistinct
 

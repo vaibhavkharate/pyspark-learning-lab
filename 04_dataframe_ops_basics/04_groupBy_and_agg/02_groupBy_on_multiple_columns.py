@@ -1,3 +1,7 @@
+# GroupBy and Aggregation Exercises in PySpark
+# groupBy with multiple columns allows you to perform aggregations based on combinations of different attributes. In this exercise, we will explore various scenarios using the sales dataset to perform groupBy and aggregation operations in PySpark.
+# in real scenarios, you may want to analyze data based on multiple dimensions, such as region, department, and gender. This exercise
+# in industry scenarios, you may want to analyze data based on multiple dimensions, such as region, department, and gender. This exercise
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import sum, avg, max, min, count, countDistinct
 
@@ -45,7 +49,7 @@ df.groupBy("Region", "Gender").agg(max("Sales").alias("Highest_Sales")).show()
 # SQL Equivalent
 spark.sql("SELECT Region, Gender, MAX(Sales) AS Highest_Sales FROM sales_data GROUP BY Region, Gender").show()
 
-# Exercise 8: Count Distinct Departments in Each Region
+# Exercise 8: Count Distinct Departments in Each spaRegion
 df.groupBy("Region").agg(countDistinct("Department").alias("Distinct_Departments")).show()
 # SQL Equivalent
 spark.sql("SELECT Region, COUNT(DISTINCT Department) AS Distinct_Departments FROM sales_data GROUP BY Region").show()
