@@ -1,3 +1,10 @@
+# windows functions are used for the purpose of performing calculations across a set of table rows that are somehow related to the current row. They are often used for ranking, cumulative sums, moving averages, and other calculations that require context from surrounding rows.
+# the window functions are applied to a specific partition of the data, defined by the user, and can be ordered based on one or more columns. This allows for complex calculations that take into account the values of other rows in the same partition.
+# in real life scenarios, window functions are particularly useful for tasks such as calculating running totals, ranking items within categories, and comparing values across different time periods or groups.
+# the window in industry is often used in financial analysis, sales performance tracking, and any situation where understanding the relative position of data points within a group is important. For example, a company might use window functions to rank sales representatives based on their sales figures within each region, or to calculate the moving average of stock prices over time.
+
+
+
 from pyspark.sql import SparkSession
 from pyspark.sql.window import Window
 from pyspark.sql.functions import col, row_number, rank, dense_rank, sum, avg, max, min, lead, lag, count
