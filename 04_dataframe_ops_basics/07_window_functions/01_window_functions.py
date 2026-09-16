@@ -45,6 +45,7 @@ windowSpec = Window.partitionBy("Department").orderBy("Salary")
 
 # Exercise 1: Rank by Salary within each Department
 # Using PySpark's rank function to assign ranks to employees based on their salary within each department.
+# This is useful for scenarios where you want to identify the relative position of employees based on their salary within their department.
 df.withColumn("rank", rank().over(windowSpec)).show()
 spark.sql("SELECT *, RANK() OVER (PARTITION BY Department ORDER BY Salary) as rank FROM employees").show()
 
@@ -63,7 +64,9 @@ spark.sql("SELECT *, ROW_NUMBER() OVER (PARTITION BY Department ORDER BY Salary)
 # Exercise 4: Cumulative Salary within each Department
 # Using PySpark's sum function to calculate the cumulative salary within each department sorted by salary.
 # This is useful for understanding the total salary expenditure up to each employee within a department.
-df.withColumn("cumulative_salary", sum("Salary").over(windowSpec.rowsBetween(Window.unboundedPreceding, Window.currentRow))).show()
+df.withColumn("cumulative_salary", sum("Salary").over(windowSpec.rowsBetween(Window.unboundedPreceding, Window.currentRow))).show() 
+# the functions and method used here are part of PySpark's window functions. The sum function calculates the cumulative salary, and the rowsBetween method defines the range of rows to include in the calculation, starting from the first row of the partition (unboundedPreceding) to the current row (currentRow). This allows for a running total of salaries within each department.
+# in the above line, we are using the sum function to calculate the cumulative salary for each employee within their department, ordered by salary. The rowsBetween method specifies that we want to include all rows from the start of the partition (unboundedPreceding) up to the current row (currentRow) in the calculation.
 spark.sql("SELECT *, SUM(Salary) OVER (PARTITION BY Department ORDER BY Salary) as cumulative_salary FROM employees").show()
 
 # Exercise 5: Moving Average Salary within each Department
