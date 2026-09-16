@@ -1,3 +1,9 @@
+# Dealing with Missing Data in PySpark
+# in real-world datasets, missing data is a common issue that can affect the quality of analysis. PySpark provides several methods to handle missing data, including dropping rows with null values and filling them with specific values.
+# dropping rows with missing data can be done using the `dropna()` method, which allows you to specify whether to drop rows with any null values or only those where all values are null. You can also drop rows based on specific columns.
+# filling missing values can be achieved using the `fillna()` method, which allows you to replace null values with a specified value or the mean of the column. Additionally, you can use the `when()` function to apply conditional logic for replacing nulls based on certain criteria.
+
+
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, lit, when, avg, count
 
@@ -19,7 +25,7 @@ data = [
 ]
 
 # Columns: Name, Age, Sales
-df = spark.createDataFrame(data, ["Name", "Age", "Sales"])
+df = spark.createDataFrame(data, ["Name", "Age", "Sales"]) # this lines creates a DataFrame with the sample data, where some rows contain missing values (None) in the 'Age' and 'Sales' columns. The DataFrame is then registered as a temporary SQL table named "people" for SQL queries.
 
 # Register DataFrame as a SQL table
 df.createOrReplaceTempView("people")
@@ -30,27 +36,36 @@ df.na.drop().show()
 spark.sql("SELECT * FROM people WHERE Age IS NOT NULL AND Sales IS NOT NULL").show()
 
 # Exercise 2: Drop rows where all columns are missing
-df.na.drop(how="all").show()
+df.na.drop(how="all").show() # how parameter specifies the condition for dropping rows. In this case, "all" means that only rows where all column values are null will be dropped.
+# basically how="all" means that the row will be dropped only if all of its columns are null. If at least one column has a non-null value, the row will be retained in the DataFrame.
 spark.sql("SELECT * FROM people WHERE NOT (Age IS NULL AND Sales IS NULL AND Name IS NULL)").show()
 
 # Exercise 3: Drop rows where any column is missing
-df.na.drop(how="any").show()
+df.na.drop(how="any").show() # how="any" means that the row will be dropped if any of its columns have a null value. If even one column is null, the entire row will be removed from the DataFrame.
 spark.sql("SELECT * FROM people WHERE Age IS NOT NULL AND Sales IS NOT NULL AND Name IS NOT NULL").show()
 
 # Exercise 4: Drop rows where missing in specific columns
 df.na.drop(subset=["Age"]).show()
+# The subset parameter allows you to specify a list of columns to consider when dropping rows. In this case, only rows where the 'Age' column is null will be dropped, while other columns can still have null values without affecting the row's retention.
+# subset=["Age"] means that the DataFrame will drop rows where the 'Age' column has null values, regardless of the values in other columns. Rows with nulls in other columns will not be dropped unless they also have nulls in the 'Age' column.
 spark.sql("SELECT * FROM people WHERE Age IS NOT NULL").show()
 
 # Exercise 5: Fill all missing values with zeros
 df.na.fill(0).show()
+# The fillna() method replaces all null values in the DataFrame with the specified value, which is 0 in this case. This is useful for numerical columns where you want to treat missing values as zero.
+# fillna(0) means that all null values in the DataFrame will be replaced with 0, regardless of the column type. This is a common approach when you want to ensure that numerical calculations can proceed without errors due to null values.
 spark.sql("SELECT Name, COALESCE(Age, 0) AS Age, COALESCE(Sales, 0) AS Sales FROM people").show()
 
 # Exercise 6: Fill missing values with specific values for each column
 df.na.fill({"Age": 20, "Sales": 100}).show()
+# The fillna() method can also accept a dictionary where you can specify different fill values for different columns. In this case, missing values in the 'Age' column are filled with 20, and missing values in the 'Sales' column are filled with 100.
+# fillna({"Age": 20, "Sales": 100}) means that null values in the 'Age' column will be replaced with 20, and null values in the 'Sales' column will be replaced with 100. This allows for more granular control over how missing data is handled for different columns.
 spark.sql("SELECT Name, COALESCE(Age, 20) AS Age, COALESCE(Sales, 100) AS Sales FROM people").show()
 
 # Exercise 7: Fill missing values using the mean of the column
-mean_age = df.select(avg("Age")).first()[0]
+mean_age = df.select(avg("Age")).first()[0] # this line calculates the mean of the 'Age' column by selecting the average using the avg() function. The first() method retrieves the first row of the result, and [0] accesses the average value from that row.  
+# The mean_age variable now holds the average age, which can be used to fill missing values in the 'Age' column.
+# .first()[0] retrieves the first row of the DataFrame returned by the avg() function, and [0] accesses the first element of that row, which is the average age value. This value is then stored in the mean_age variable for later use in filling missing values.
 df.na.fill({"Age": mean_age}).show()
 spark.sql(f"SELECT Name, COALESCE(Age, {mean_age}) AS Age, Sales FROM people").show()
 
