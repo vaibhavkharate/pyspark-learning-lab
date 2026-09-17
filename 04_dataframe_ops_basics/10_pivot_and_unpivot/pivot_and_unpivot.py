@@ -3,6 +3,9 @@ from pyspark.sql.functions import sum, expr, col
 
 # Initialize a Spark session
 spark = SparkSession.builder.appName("PivotUnpivotDemo").getOrCreate()
+# here .appName("PivotUnpivotDemo") sets the name of the Spark application to "PivotUnpivotDemo". This name is used for identification purposes in the Spark UI and logs, making it easier to track and manage the application during execution. It helps users distinguish between different Spark applications running on the same cluster or environment.
+# basically .appName() is a method that allows you to assign a name to your Spark application, which can be useful for monitoring and debugging purposes.
+# .getOrCreate() is a method that either retrieves an existing Spark session or creates a new one if none exists. It ensures that there is a single Spark session available for the application, allowing for efficient resource management and avoiding the overhead of creating multiple sessions. If a session already exists, it returns that session; otherwise, it initializes a new one with the specified configurations.
 
 # Sample data
 data = [
@@ -34,6 +37,9 @@ df.createOrReplaceTempView("sales")
 # Pivot Exercises
 # Exercise 1: Pivot the data to show total sales for each fruit by region
 pivot_df = df.groupBy("Region").pivot("Fruit").sum("Sales")
+# .pivot("Fruit") is a method that reshapes the DataFrame by transforming unique values from the specified column (in this case, "Fruit") into separate columns. Each unique value in the "Fruit" column becomes a new column in the resulting DataFrame, allowing for a more organized and summarized view of the data.
+# .sum("Sales") is an aggregation function that calculates the sum of the "Sales" column for each group defined by the pivot operation. After pivoting the DataFrame, this function computes the total sales for each fruit within each region, providing a concise summary of sales data across different categories.
+#  this combination of pivoting and aggregation allows for a clear representation of sales data, making it easier to analyze and compare sales performance across different fruits and regions.
 pivot_df.show()
 # SQL Equivalent (not directly supported in Spark SQL, conceptual only)
 spark.sql("SELECT Region, SUM(CASE WHEN Fruit = 'Apple' THEN Sales ELSE 0 END) AS Apple, SUM(CASE WHEN Fruit = 'Banana' THEN Sales ELSE 0 END) AS Banana FROM sales GROUP BY Region").show()
