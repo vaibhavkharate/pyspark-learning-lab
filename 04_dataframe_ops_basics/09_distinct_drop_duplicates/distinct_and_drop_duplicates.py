@@ -77,6 +77,8 @@ SELECT Name, Department, first(Salary) OVER (PARTITION BY Name, Department ORDER
 
 # Exercise 9: Show distinct salaries greater than 1000
 df.select("Salary").distinct().filter("Salary > 1000").show()
+# here distinct() is used to get unique salary values, and filter() is applied to retain only those salaries that are greater than 1000. This combination allows us to extract distinct salaries that meet the specified condition.
+# .filter is a method that allows us to apply a condition to the DataFrame, returning only the rows that satisfy that condition. In this case, it filters the distinct salaries to include only those greater than 1000.
 spark.sql("SELECT DISTINCT Salary FROM employees WHERE Salary > 1000").show()
 
 # Exercise 10: Get all distinct combinations of Name and Department
