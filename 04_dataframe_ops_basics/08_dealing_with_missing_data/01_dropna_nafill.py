@@ -70,10 +70,13 @@ df.na.fill({"Age": mean_age}).show()
 spark.sql(f"SELECT Name, COALESCE(Age, {mean_age}) AS Age, Sales FROM people").show()
 
 # Exercise 8: Filter out rows with missing sales data
+# The filter() method is used to select rows based on a condition. In this case, we filter the DataFrame to include only rows where the 'Sales' column is not null. This effectively removes any rows with missing sales data.
+# isNotNull() is a method that checks if a column's value is not null. When used in the filter() method, it allows us to retain only those rows where the specified column has a valid (non-null) value.
 df.filter(col("Sales").isNotNull()).show()
 spark.sql("SELECT * FROM people WHERE Sales IS NOT NULL").show()
 
 # Exercise 9: Replace null values in 'Sales' with the average sales
+
 avg_sales = df.select(avg("Sales")).first()[0]
 df.na.fill({"Sales": avg_sales}).show()
 spark.sql(f"SELECT Name, Age, COALESCE(Sales, {avg_sales}) AS Sales FROM people").show()
