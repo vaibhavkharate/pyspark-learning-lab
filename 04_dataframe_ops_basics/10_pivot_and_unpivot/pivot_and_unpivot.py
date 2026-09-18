@@ -51,6 +51,8 @@ pivot_df2.show()
 
 # Unpivot Exercises
 # Exercise 3: Unpivot the DataFrame back to its original form
+# this unpivoting process is achieved using the stack function, which allows for the transformation of columns into rows, effectively reversing the pivot operation. The stack function takes a specified number of key-value pairs and creates new rows for each pair, resulting in a long format DataFrame that resembles the original structure before pivoting.
+
 unpivot_expr = "stack(2, 'Apple', Apple, 'Banana', Banana) as (Fruit, Sales)"
 unpivot_df = pivot_df.select("Region", expr(unpivot_expr))
 unpivot_df.show()
