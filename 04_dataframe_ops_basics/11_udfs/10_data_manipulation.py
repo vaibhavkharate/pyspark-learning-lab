@@ -1,4 +1,8 @@
 # Write a UDF that adds a specified number of days to a date column.
+# The UDF should take two parameters: a date and an integer representing the number of days to add. The UDF should return the new date after adding the specified number of days.
+# The UDF should be registered with Spark so that it can be used in SQL queries as well as in DataFrame transformations. The UDF should handle null values gracefully, returning null if either the date or the number of days is null.
+# in real-world scenarios, this UDF can be used to manipulate date columns in a DataFrame, such as calculating due dates, expiration dates, or any other date-related calculations that require adding a certain number of days to a given date. The UDF can be applied to a DataFrame using the withColumn method or in SQL queries after registering it with Spark.
+# additionally, the UDF can be used in conjunction with other Spark SQL functions to perform more complex date manipulations, such as filtering rows based on calculated dates or aggregating data over specific time periods. The UDF can also be optimized for performance by leveraging Spark's built-in functions and avoiding unnecessary computations.
 
 from datetime import timedelta
 from pyspark.sql.functions import udf, col
